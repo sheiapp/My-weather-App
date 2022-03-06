@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icon_size">60dp</dimen>
+    <dimen name="padding_forecast_item">16dp</dimen>
+    <dimen name="weather_info_layout_margin">32dp</dimen>
+    <dimen name="date_size">12sp</dimen>
+    <dimen name="search_layout_margin">32dp</dimen>
+    <dimen name="margin_30_dp">30dp</dimen>
+</resources>
