@@ -17,13 +17,13 @@ data class FavoriteCityWeatherEntity(
     @ColumnInfo(name = "id")
     var columnId: Int = 0,
     @ColumnInfo(name = "city_name")
-    val cityName: String,
+    val cityName: String?,
     @ColumnInfo(name = "condition_icon")
-    val conditionIcon: String,
+    val conditionIcon: String?,
     @ColumnInfo(name = "condition")
-    val conditionText: String,
+    val conditionText: String?,
     @ColumnInfo(name = "temperatureInCelsius")
-    val tempInCelsius: String,
+    val tempInCelsius: String?,
     @ColumnInfo(name = "temperatureInFahrenheit")
-    val tempInFahrenheit: String
+    val tempInFahrenheit: String?
 )

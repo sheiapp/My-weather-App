@@ -11,8 +11,8 @@ import retrofit2.http.Query
  */
 interface WeatherApi {
     @GET("v1/forecast.json?key=e27351089ab9455ca1072601220403")
-    suspend fun getWeatherAndForecastBasedOnLocation(
-        @Query("q") query: String,
+    suspend fun getWeatherAndForecast(
+        @Query("q") query: String?,
         @Query("days") noOfDays: String = NO_OF_FORECAST_DAYS
     ): Response<WeatherAndForecastResponseData>
 

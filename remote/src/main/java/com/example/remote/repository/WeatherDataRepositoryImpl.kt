@@ -11,8 +11,7 @@ import javax.inject.Inject
 class WeatherDataRepositoryImpl @Inject constructor(private val _weatherApi: WeatherApi) :
     WeatherDataRepository {
 
-    override suspend fun getWeatherAndForecastBasedOnLocation(query: String) = apiValidator {
-        _weatherApi.getWeatherAndForecastBasedOnLocation(query =query )
+    override suspend fun getWeatherAndForecast(query: String?) = apiValidator {
+        _weatherApi.getWeatherAndForecast(query =query )
     }
-
 }

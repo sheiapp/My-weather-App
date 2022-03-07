@@ -10,4 +10,5 @@
     <color name="ash">#D8D6D6</color>
     <color name="black_20">#33000000</color>
     <color name="search_box_bg">#9CFFFFFF</color>
+    <color name="app_blue">#2196F3</color>
 </resources>

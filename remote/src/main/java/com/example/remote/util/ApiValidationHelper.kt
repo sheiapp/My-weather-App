@@ -15,7 +15,7 @@ suspend fun <T> apiValidator(call: suspend () -> Response<T>): Resource<T> {
             Resource.Error(data = null, response.message())
         }
     } catch (e: Exception) {
-        Resource.Error(data = null, Constants.UNKNOWN_ERROR)
+        Resource.Error(data = null, Constants.SERVER_ERROR)
     }
 }
 

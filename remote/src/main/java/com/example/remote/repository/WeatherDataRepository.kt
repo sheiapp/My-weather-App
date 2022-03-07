@@ -8,6 +8,5 @@ import com.example.remote.util.Resource
  */
 interface WeatherDataRepository {
 
-    suspend fun getWeatherAndForecastBasedOnLocation(query: String): Resource<WeatherAndForecastResponseData>
-
+    suspend fun getWeatherAndForecast(query: String?): Resource<WeatherAndForecastResponseData>
 }

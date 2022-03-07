@@ -1,4 +1,4 @@
-package com.example.myweatherapp.ui.fragments
+package com.example.myweatherapp.ui.favoite_cities_ui
 
 import android.os.Bundle
 import android.view.View
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
-import com.example.myweatherapp.ui.FavoriteCitiesViewModel
 import com.example.myweatherapp.R
 import com.example.myweatherapp.adapter.FavoriteCitiesAdapter
 import com.example.myweatherapp.databinding.FragmentFavoriteCitiesBinding
@@ -19,9 +18,11 @@ class FavoriteCitiesFragment : Fragment(R.layout.fragment_favorite_cities) {
 
     @Inject
     lateinit var glideRequestManager: RequestManager
-    private val _adapter by lazy { FavoriteCitiesAdapter(glideRequestManager){cityName->
-        navigateToHome(cityName)
-    } }
+    private val _adapter by lazy {
+        FavoriteCitiesAdapter(glideRequestManager) { cityName ->
+            navigateToHome(cityName)
+        }
+    }
     private var _binding: FragmentFavoriteCitiesBinding? = null
     private val binding get() = _binding!!
 
@@ -45,9 +46,12 @@ class FavoriteCitiesFragment : Fragment(R.layout.fragment_favorite_cities) {
         }
     }
 
-    private fun navigateToHome(cityName:String){
-        val goBackToHome=FavoriteCitiesFragmentDirections.actionNavigateToHomeFragment()
-        goBackToHome.cityName=cityName
+    private fun navigateToHome(cityName: String?) {
+        val goBackToHome =
+            FavoriteCitiesFragmentDirections.actionNavigateToHomeFragment()
+        cityName?.let {
+            goBackToHome.cityName = it
+        }
         findNavController().navigate(goBackToHome)
     }
 

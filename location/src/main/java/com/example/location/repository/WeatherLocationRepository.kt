@@ -1,13 +1,9 @@
 package com.example.location.repository
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
-import androidx.core.app.ActivityCompat
-import com.example.location.utils.LocationResource
+import com.example.location.utils.cacheTheLocation
+import com.example.location.utils.getCachedLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -20,43 +16,17 @@ class WeatherLocationRepository @Inject constructor(
     private val context: Context,
     private val mFusedLocationClient: FusedLocationProviderClient
 ) {
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        return false
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
 
     @SuppressLint("MissingPermission", "SetTextI18n")
-    suspend fun getLocation(): LocationResource<Location> = suspendCoroutine { continuation ->
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
-                    val location: Location? = task.result
-                    if (location != null) {
-                        continuation.resume(LocationResource.Success(location))
-                    } }
+    suspend fun getLocation(): String? = suspendCoroutine { continuation ->
+        mFusedLocationClient.lastLocation.addOnCompleteListener { task ->
+            if (task.exception is Exception || task.result == null) {
+                continuation.resume(context.getCachedLocation())
             } else {
-                continuation.resume(LocationResource.LocationStatus(isLocationEnabled = false))
+                val latLong = "${task.result.latitude},${task.result.longitude}"
+                context.cacheTheLocation(latLong)
+                continuation.resume(latLong)
             }
-        } else {
-            continuation.resume(LocationResource.PermissionStatus(IsPermissionGranted = false))
         }
     }
 }

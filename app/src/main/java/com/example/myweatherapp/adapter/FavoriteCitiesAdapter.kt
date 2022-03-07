@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.forecast_item.view.condition
 /**
  * Created by Shaheer cs on 05/03/2022.
  */
-class FavoriteCitiesAdapter(private val requestManager: RequestManager,private val clickEventData:(String) ->Unit) :
+class FavoriteCitiesAdapter(private val requestManager: RequestManager,private val clickEventData:(String?) ->Unit) :
     ListAdapter<FavoriteCityWeatherEntity, FavoriteCitiesItemViewHolder>(FavoriteCitiesDiffUtil()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,

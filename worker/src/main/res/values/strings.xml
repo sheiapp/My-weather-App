@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_content_title">My Weather App</string>
+    <string name="notification_content_text_place_holder">%1$s° %2$s in %3$s.</string>
+</resources>

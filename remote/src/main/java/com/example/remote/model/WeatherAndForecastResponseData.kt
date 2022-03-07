@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class WeatherAndForecastResponseData(
     @SerializedName("current")
-    val current: Current,
+    var current: Current? = null,
     @SerializedName("forecast")
-    val forecast: Forecast,
+    val forecast: Forecast? = null,
     @SerializedName("location")
-    val location: Location
+    val location: Location? = null
 )

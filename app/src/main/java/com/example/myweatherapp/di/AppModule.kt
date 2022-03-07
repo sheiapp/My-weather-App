@@ -2,6 +2,9 @@ package com.example.myweatherapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -11,10 +14,11 @@ import com.example.local.room.WeatherDataBase
 import com.example.local.utils.Constant.DATABASE_NAME
 import com.example.location.repository.WeatherLocationRepository
 import com.example.myweatherapp.R
-import com.example.remote.repository.WeatherDataRepositoryImpl
+import com.example.remote.usecase.WeatherAndForecastBasedOnCityNameAndLocationUseCase
 import com.example.remote.Constants.BASE_URL
-import com.example.remote.repository.WeatherDataRepository
 import com.example.remote.network.WeatherApi
+import com.example.remote.repository.WeatherDataRepository
+import com.example.remote.repository.WeatherDataRepositoryImpl
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -90,6 +94,17 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun weatherAndForecastUseCaseProvider(
+        weatherDataRepository: WeatherDataRepository,
+        weatherLocationRepository: WeatherLocationRepository
+    ) = WeatherAndForecastBasedOnCityNameAndLocationUseCase(
+        weatherDataRepository,
+        weatherLocationRepository
+    )
+
+
+    @Provides
+    @Singleton
     fun initGlide(@ApplicationContext appContext: Context): RequestManager = Glide.with(appContext)
         .setDefaultRequestOptions(
             RequestOptions()
@@ -122,6 +137,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun localWeatherRepositoryProvider(weatherDAO: WeatherDAO)= LocalWeatherRepository(weatherDAO)
+    fun localWeatherRepositoryProvider(weatherDAO: WeatherDAO) = LocalWeatherRepository(weatherDAO)
+
+    @Provides
+    @Singleton
+    fun workManagerProvider(@ApplicationContext appContext: Context) =
+        WorkManager.getInstance(appContext)
+
+    @Provides
+    @Singleton
+    fun workConstrainProvider() =
+        Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
 
 }

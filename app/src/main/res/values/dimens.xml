@@ -6,4 +6,5 @@
     <dimen name="date_size">12sp</dimen>
     <dimen name="search_layout_margin">32dp</dimen>
     <dimen name="margin_30_dp">30dp</dimen>
+    <dimen name="fav_ic_size">40dp</dimen>
 </resources>
