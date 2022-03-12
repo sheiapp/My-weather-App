@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
 import com.example.myweatherapp.R
 import com.example.myweatherapp.adapter.FavoriteCitiesAdapter
 import com.example.myweatherapp.databinding.FragmentFavoriteCitiesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,9 +43,13 @@ class FavoriteCitiesFragment : Fragment(R.layout.fragment_favorite_cities) {
     }
 
     private fun setupFavoriteCitiesUI() {
-        viewModel.weatherAndForecastData.observe(viewLifecycleOwner) {
-            it?.let {
-                _adapter.submitList(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.weatherAndForecastData.collect {
+                    it.let {
+                        _adapter.submitList(it)
+                    }
+                }
             }
         }
     }
@@ -54,6 +62,5 @@ class FavoriteCitiesFragment : Fragment(R.layout.fragment_favorite_cities) {
         }
         findNavController().navigate(goBackToHome)
     }
-
 
 }

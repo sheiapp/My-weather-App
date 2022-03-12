@@ -8,17 +8,13 @@ import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.example.local.repository.LocalWeatherRepository
-import com.example.local.room.WeatherDAO
 import com.example.local.room.WeatherDataBase
-import com.example.local.utils.Constant.DATABASE_NAME
-import com.example.location.repository.WeatherLocationRepository
+import com.example.local.room.WeatherDataBase.Companion.DATABASE_NAME
+import com.example.location.WeatherLocationProvider
 import com.example.myweatherapp.R
-import com.example.remote.usecase.WeatherAndForecastBasedOnCityNameAndLocationUseCase
+import com.example.myweatherapp.repository.WeatherRepository
 import com.example.remote.Constants.BASE_URL
 import com.example.remote.network.WeatherApi
-import com.example.remote.repository.WeatherDataRepository
-import com.example.remote.repository.WeatherDataRepositoryImpl
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -86,21 +82,12 @@ object AppModule {
     fun appServiceProvider(retrofit: Retrofit): WeatherApi =
         retrofit.create(WeatherApi::class.java)
 
-    @Provides
-    @Singleton
-    fun weatherDataRepositoryProvider(weatherApi: WeatherApi): WeatherDataRepository {
-        return WeatherDataRepositoryImpl(weatherApi)
-    }
 
     @Provides
     @Singleton
-    fun weatherAndForecastUseCaseProvider(
-        weatherDataRepository: WeatherDataRepository,
-        weatherLocationRepository: WeatherLocationRepository
-    ) = WeatherAndForecastBasedOnCityNameAndLocationUseCase(
-        weatherDataRepository,
-        weatherLocationRepository
-    )
+    fun weatherRepository(weatherApi: WeatherApi, weatherDatabase: WeatherDataBase,
+                         weatherLocationProvider: WeatherLocationProvider) =
+        WeatherRepository(weatherApi, weatherDatabase,weatherLocationProvider)
 
 
     @Provides
@@ -115,8 +102,8 @@ object AppModule {
     @Singleton
     fun weatherAppLocationProvider(
         @ApplicationContext context: Context, mFusedLocationClient: FusedLocationProviderClient
-    ): WeatherLocationRepository {
-        return WeatherLocationRepository(context, mFusedLocationClient)
+    ): WeatherLocationProvider {
+        return WeatherLocationProvider(context, mFusedLocationClient)
     }
 
     @Provides
@@ -134,10 +121,6 @@ object AppModule {
     @Provides
     @Singleton
     fun weatherDaoProvider(dataBase: WeatherDataBase) = dataBase.getWeatherDao()
-
-    @Provides
-    @Singleton
-    fun localWeatherRepositoryProvider(weatherDAO: WeatherDAO) = LocalWeatherRepository(weatherDAO)
 
     @Provides
     @Singleton

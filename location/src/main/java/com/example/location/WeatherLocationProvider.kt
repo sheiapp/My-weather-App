@@ -1,4 +1,4 @@
-package com.example.location.repository
+package com.example.location
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,7 +12,7 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Created by Shaheer cs on 05/03/2022.
  */
-class WeatherLocationRepository @Inject constructor(
+class WeatherLocationProvider @Inject constructor(
     private val context: Context,
     private val mFusedLocationClient: FusedLocationProviderClient
 ) {

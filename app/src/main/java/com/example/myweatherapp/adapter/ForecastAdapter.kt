@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.local.model.Forecast
 import com.example.myweatherapp.databinding.ForecastItemBinding
-import com.example.remote.model.Forecastday
 import kotlinx.android.synthetic.main.forecast_item.view.*
 
 /**
  * Created by Shaheer cs on 04/03/2022.
  */
 class ForecastAdapter(private val requestManager: RequestManager) :
-    ListAdapter<Forecastday, ForecastItemViewHolder>(ForeCastDiffUtil()) {
+    ListAdapter<Forecast, ForecastItemViewHolder>(ForeCastDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastItemViewHolder {
         val itemView =
             ForecastItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -32,10 +32,10 @@ class ForecastItemViewHolder(
     private val requestManager: RequestManager
 ) :
     RecyclerView.ViewHolder(itemView.root) {
-    fun onBindView(dataItem: Forecastday) {
+    fun onBindView(dataItem: Forecast) {
         itemView.date.text = dataItem.date
-        itemView.condition.text = dataItem.day.condition.text
-        setupImage("https:${dataItem.day.condition.icon}")
+        itemView.condition.text = dataItem.conditionText
+        setupImage("https:${dataItem.conditionIcon}")
     }
 
     private fun setupImage(imageUrl: String?) {
@@ -46,10 +46,10 @@ class ForecastItemViewHolder(
     }
 }
 
-class ForeCastDiffUtil : DiffUtil.ItemCallback<Forecastday>() {
-    override fun areItemsTheSame(oldItem: Forecastday, newItem: Forecastday) =
+class ForeCastDiffUtil : DiffUtil.ItemCallback<Forecast>() {
+    override fun areItemsTheSame(oldItem: Forecast, newItem: Forecast) =
         newItem.date == oldItem.date
 
-    override fun areContentsTheSame(oldItem: Forecastday, newItem: Forecastday) =
+    override fun areContentsTheSame(oldItem: Forecast, newItem: Forecast) =
         newItem == oldItem
 }

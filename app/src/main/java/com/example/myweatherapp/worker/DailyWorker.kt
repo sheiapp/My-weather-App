@@ -6,12 +6,12 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.example.local.room.WeatherEntity
 import com.example.myweatherapp.R
-import com.example.remote.model.WeatherAndForecastResponseData
-import com.example.remote.usecase.WeatherAndForecastBasedOnCityNameAndLocationUseCase
-import com.example.remote.util.Resource
+import com.example.myweatherapp.repository.WeatherRepository
 import com.example.myweatherapp.worker.Constants.CHANNEL_ID
 import com.example.myweatherapp.worker.Constants.NOTIFICATION_ID
+import com.example.remote.util.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.collectLatest
@@ -24,20 +24,27 @@ import kotlinx.coroutines.flow.collectLatest
 class DailyWorker @AssistedInject constructor(
     @Assisted private val ctx: Context,
     @Assisted params: WorkerParameters,
-    private val _weatherAndForecastBasedOnCityNameAndLocationUseCase: WeatherAndForecastBasedOnCityNameAndLocationUseCase
+    private val _weatherRepository: WeatherRepository
 ) : CoroutineWorker(ctx, params) {
-    private lateinit var response: Resource<WeatherAndForecastResponseData>
+    private lateinit var response: Resource<WeatherEntity>
     override suspend fun doWork(): Result {
-        _weatherAndForecastBasedOnCityNameAndLocationUseCase.getWeatherAndForecastBasedOnLocation().collectLatest { response = it }
+        _weatherRepository.getWeatherAndForecastBasedOnLocation().collectLatest { response = it }
         if (this::response.isInitialized) {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let {
                         val contentTitle =
                             ctx.resources.getString(R.string.app_name)
+                        val tempInSelectedUnit = if (it.isTempInCelsius) String.format(
+                            ctx.resources.getString(R.string.celsius_placeholder),
+                            it.tempInCelsius
+                        ) else String.format(
+                            ctx.resources.getString(R.string.fahrenheit),
+                            it.tempInFahrenheit
+                        )
                         val contentText = String.format(
                             ctx.resources.getString(R.string.notification_content_text_place_holder),
-                            it.current?.tempC, it.current?.condition?.text, it.location?.region
+                            tempInSelectedUnit, it.conditionText, it.cityName
                         )
                         startForegroundService(contentTitle, contentText)
                     }

@@ -4,7 +4,7 @@
     <string name="favorite_cities">favorite cities</string>
     <string name="week">week</string>
     <string name="settings">settings</string>
-    <string name="notification_content_text_place_holder">%1$s° %2$s in %3$s.</string>
+    <string name="notification_content_text_place_holder">%1$s %2$s in %3$s.</string>
     <string name="search_city">search city</string>
     <string name="dialog_message">"This app needs location to work"</string>
     <string name="dialog_positive_action_text">"Give Permission"</string>
@@ -13,9 +13,12 @@
     <string name="favorite_msg">Adding the city to your favorite list.</string>
 
 
-    <string name="weather_placeholder">%1$s°</string>
+    <string name="celsius_placeholder">%1$s°C</string>
+    <string name="fahrenheit_placeholder">%1$s°F</string>
     <string name="precipitation_placeholder">%1$s in</string>
     <string name="wind_speed_placeholder">%1$s mph</string>
     <string name="humidity_placeholder" >%1$s \%%</string>
     <string name="visibility_placeholder">%1$s mi</string>
+    <string name="celsius">celsius</string>
+    <string name="fahrenheit">fahrenheit</string>
 </resources>

@@ -14,7 +14,7 @@ interface WeatherApi {
     suspend fun getWeatherAndForecast(
         @Query("q") query: String?,
         @Query("days") noOfDays: String = NO_OF_FORECAST_DAYS
-    ): Response<WeatherAndForecastResponseData>
+    ): WeatherAndForecastResponseData
 
 
 }
