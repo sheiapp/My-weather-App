@@ -1,17 +1,103 @@
 buildscript {
-    ext.lifecycle_version = '2.4.1'
-    ext.gsonconvertor_version='2.8.5'
-    ext.retrofit_version='2.6.0'
-    ext.loggin_interceptor_version='3.10.0'
-    ext.coroutines_version='1.6.0'
-    ext.coroutines_adapter='0.9.2'
-    ext.glide_version='4.11.0'
-    ext.nav_version = '2.3.1'
-    ext.room_version = '2.4.2'
-    ext.workmanager_version='2.4.0'
+    ext {
+        versions = [
+                //androidx
+                legacySupportVersion            : "1.0.0",
+                coreKtxVersion                  : "1.7.0",
+                appCompatVersion                : "1.4.1",
+                constraintLayoutVersion         : "2.1.3",
+                //location
+                playServiceLocationVersion      : "19.0.1",
+                //material design
+                materialVersion                 : "1.5.0",
+                //android test
+                junitExtVersion                 : "1.1.3",
+                espressoVersion                 : "3.4.0",
+                //test
+                jUnitVersion                    : "4.13.2",
+                //Navigation
+                navigationVersion               : "2.4.1",
+                //Hilt
+                hiltVersion                     : "2.41",
+                hiltCompilerVersion             : "1.0.0",
+                //Hilt worker
+                hiltWorkMagerVersion            : "1.0.0",
+                hiltWorkMangerRuntimeKtxVersion : "2.4.0",
+                //lifecycle
+                lifecycleVersion                : "2.4.1",
+                //Network Call
+                gsonconvertorVersion            : "2.8.5",
+                retrofitVersion                 : "2.6.0",
+                logginInterceptorVersion        : "3.10.0",
+                glideVersion                    : "4.11.0",
+                //Coroutines
+                coroutinesVersion               : "1.6.0",
+                coroutinesRetrofitAdapterVersion: "0.9.2",
+                //Room
+                roomVersion                     : "2.4.2"
+        ]
+        deps = [
+                androidx       : [
+                        legacySupport   : "androidx.legacy:legacy-support-v4:${versions.legacySupportVersion}",
+                        coreKtx         : "androidx.core:core-ktx:${versions.coreKtxVersion}",
+                        appCompat       : "androidx.appcompat:appcompat:${versions.appCompatVersion}",
+                        constraintLayout: "androidx.constraintlayout:constraintlayout:${versions.constraintLayoutVersion}"
+                ],
+                androidMaterial: [
+                        material: "com.google.android.material:material:${versions.materialVersion}"
+                ],
+                playService    : [
+                        location: "com.google.android.gms:play-services-location:${versions.playServiceLocationVersion}"
+                ]
+                ,
+                test           : [
+                        jUnit: "junit:junit:4.13.2${versions.jUnitVersion}"
+                ],
+                androidTest    : [
+                        androidxJunit: "androidx.test.ext:junit:${versions.junitExtVersion}",
+                        espresso     : "androidx.test.espresso:espresso-core:${versions.espressoVersion}"
+                ],
+                navigation     : [
+                        Fragment    : "androidx.navigation:navigation-fragment-ktx:${versions.navigationVersion}",
+                        Ui          : "androidx.navigation:navigation-ui-ktx:${versions.navigationVersion}",
+                        safeArgument: "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigationVersion}"
+                ],
+                hilt           : [
+                        androidHilt    : "com.google.dagger:hilt-android:${versions.hiltVersion}",
+                        androidCompiler: "com.google.dagger:hilt-android-compiler:${versions.hiltVersion}",
+                        hiltCompailer  : "androidx.hilt:hilt-compiler:${versions.hiltCompilerVersion}",
+                        hiltPlugin     : "com.google.dagger:hilt-android-gradle-plugin:${versions.hiltVersion}"
+                ],
+                hiltWorker     : [
+                        hiltWorkermanger : "androidx.hilt:hilt-work:${versions.hiltWorkMagerVersion}",
+                        hiltWorkMangerKtx: "androidx.work:work-runtime-ktx:${versions.hiltWorkMangerRuntimeKtxVersion}"
+                ],
+                viewModel      : [
+                        lifecycle           : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycleVersion}",
+                        lifecycleRunTimeKtx : "androidx.lifecycle:lifecycle-runtime-ktx:${versions.lifecycleVersion}",
+                        lifecycleLiveDataKtx: "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycleVersion}",
+                ],
+                networkCall    : [
+                        gsonConvertor    : "com.google.code.gson:gson:${versions.gsonconvertorVersion}",
+                        retrofit         : "com.squareup.retrofit2:retrofit:${versions.retrofitVersion}",
+                        retrofitConvertor: "com.squareup.retrofit2:converter-gson:${versions.retrofitVersion}",
+                        retrofitLogging  : "com.squareup.okhttp3:logging-interceptor:${versions.logginInterceptorVersion}",
+                        glide            : "com.github.bumptech.glide:glide:${versions.glideVersion}",
+                        glideCompiler    : "com.github.bumptech.glide:compiler:${versions.glideVersion}"
+                ],
+                coroutines     : [
+                        AndroidCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutinesVersion}",
+                        coroutinesAdapter: "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${versions.coroutinesRetrofitAdapterVersion}"
+                ],
+                roomDatabase   : [
+                        room        : "androidx.room:room-ktx:${versions.roomVersion}",
+                        roomCompiler: "androidx.room:room-compiler:${versions.roomVersion}"
+                ]
+        ]
+    }
     dependencies {
-        classpath "com.google.dagger:hilt-android-gradle-plugin:2.41"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath deps.hilt.hiltPlugin
+        classpath deps.navigation.safeArgument
     }
 }
 

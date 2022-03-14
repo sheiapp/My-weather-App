@@ -3,9 +3,7 @@ package com.example.myweatherapp.worker
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
-import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.example.local.room.WeatherEntity
 import com.example.myweatherapp.R
 import com.example.myweatherapp.repository.WeatherRepository
@@ -15,6 +13,7 @@ import com.example.remote.util.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.collectLatest
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -68,6 +67,19 @@ class DailyWorker @AssistedInject constructor(
                 }.build()
             )
         )
+    }
+
+    companion object {
+        fun scheduleWorkForNotifyingUserWithCurrentWeather(
+            workManager: WorkManager,
+            workConstraints: Constraints,
+        ) {
+            val workRequest = OneTimeWorkRequestBuilder<DailyWorker>().apply {
+                setInitialDelay(timeDiff(), TimeUnit.MILLISECONDS)
+                setConstraints(workConstraints)
+            }.build()
+            workManager.enqueue(workRequest)
+        }
     }
 
 }

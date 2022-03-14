@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">My WeatherApp</string>
     <string name="home">home</string>
     <string name="favorite_cities">favorite cities</string>
     <string name="week">week</string>

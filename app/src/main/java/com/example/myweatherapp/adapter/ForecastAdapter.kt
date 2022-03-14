@@ -9,7 +9,6 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.local.model.Forecast
 import com.example.myweatherapp.databinding.ForecastItemBinding
-import kotlinx.android.synthetic.main.forecast_item.view.*
 
 /**
  * Created by Shaheer cs on 04/03/2022.
@@ -28,13 +27,13 @@ class ForecastAdapter(private val requestManager: RequestManager) :
 }
 
 class ForecastItemViewHolder(
-    itemView: ForecastItemBinding,
+    private val viewItem: ForecastItemBinding,
     private val requestManager: RequestManager
 ) :
-    RecyclerView.ViewHolder(itemView.root) {
+    RecyclerView.ViewHolder(viewItem.root) {
     fun onBindView(dataItem: Forecast) {
-        itemView.date.text = dataItem.date
-        itemView.condition.text = dataItem.conditionText
+        viewItem.date.text = dataItem.date
+        viewItem.condition.text = dataItem.conditionText
         setupImage("https:${dataItem.conditionIcon}")
     }
 
@@ -42,7 +41,7 @@ class ForecastItemViewHolder(
         requestManager
             .load(imageUrl)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .into(itemView.icon)
+            .into(viewItem.icon)
     }
 }
 

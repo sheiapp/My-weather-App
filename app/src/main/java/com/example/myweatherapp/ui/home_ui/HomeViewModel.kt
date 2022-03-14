@@ -3,19 +3,18 @@ package com.example.myweatherapp.ui.home_ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.local.room.WeatherEntity
-import com.example.location.WeatherLocationProvider
 import com.example.myweatherapp.repository.WeatherRepository
-import com.example.myweatherapp.worker.DailyWorker
-import com.example.myweatherapp.worker.timeDiff
+import com.example.myweatherapp.worker.DailyWorker.Companion.scheduleWorkForNotifyingUserWithCurrentWeather
 import com.example.remote.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -24,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val _workManager: WorkManager,
-    private val _workConstraints: Constraints,
+    _workManager: WorkManager,
+    _workConstraints: Constraints,
     private val _weatherRepository: WeatherRepository
 ) : ViewModel() {
 
@@ -36,15 +35,8 @@ class HomeViewModel @Inject constructor(
     private val _tempUnitState = MutableSharedFlow<Boolean?>()
     val tempUnitState = _tempUnitState.asSharedFlow()
 
-
-    private val _workRequest = OneTimeWorkRequestBuilder<DailyWorker>().apply {
-        setInitialDelay(timeDiff(), TimeUnit.MILLISECONDS)
-        setConstraints(_workConstraints)
-    }.build()
-
-
     init {
-        scheduleWorkForNotifyingUserWithCurrentWeather()
+        scheduleWorkForNotifyingUserWithCurrentWeather(_workManager, _workConstraints)
         getWeatherAndForecastForLocation()
     }
 
@@ -59,7 +51,8 @@ class HomeViewModel @Inject constructor(
     fun getWeatherAndForecastForLocation() = viewModelScope.launch(Dispatchers.IO) {
 
         _weatherRepository.getWeatherAndForecastBasedOnLocation().collect {
-            _tempUnitState.emit(it.data?.isTempInCelsius)
+            if (it is Resource.Loading)
+                _tempUnitState.emit(it.data?.isTempInCelsius)
             _weatherAndForecastDataSet.value = it
         }
     }
@@ -79,9 +72,4 @@ class HomeViewModel @Inject constructor(
         }
         _weatherRepository.updateTempUnit(isCelsius)
     }
-
-    private fun scheduleWorkForNotifyingUserWithCurrentWeather() {
-        _workManager.enqueue(_workRequest)
-    }
-
 }

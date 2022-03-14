@@ -14,6 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "My WeatherApp"
 include ':app'
-include ':remote'
-include ':location'
-include ':local'
+include ':data'
+include ':data:local'
+include ':data:remote'
+include ':data:location'
+

@@ -68,7 +68,7 @@ class WeatherRepository @Inject constructor(
     )
 
     suspend fun setTheCurrentSelectedCityAsFavorite(cityName: String) {
-        _weatherDatabase.getWeatherDao().markCurrentCityAsFavorite(cityName)
+        _weatherDatabase.getWeatherDao().addCurrentCityAsFavorite(cityName)
     }
 
     suspend fun updateTempUnit(isCelsius: Boolean) {

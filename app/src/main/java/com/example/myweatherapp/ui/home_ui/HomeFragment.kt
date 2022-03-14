@@ -64,7 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 binding.tempSwitch.isChecked = it
             }
         }
-        binding.tempSwitch.setOnCheckedChangeListener { buttonView, is_checked ->
+        binding.tempSwitch.setOnCheckedChangeListener { _, is_checked ->
             viewModel.setTempUnit(is_checked)
         }
     }
