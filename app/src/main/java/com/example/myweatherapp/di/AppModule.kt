@@ -11,6 +11,8 @@ import com.example.local.room.WeatherDataBase
 import com.example.location.WeatherLocationProvider
 import com.example.myweatherapp.R
 import com.example.myweatherapp.repository.WeatherRepository
+import com.example.myweatherapp.repository.WeatherRepositoryImpl
+import com.example.myweatherapp.usecase.WeatherAndForecastUseCase
 import com.example.remote.network.WeatherApi
 import dagger.Module
 import dagger.Provides
@@ -28,10 +30,16 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun weatherRepository(weatherApi: WeatherApi, weatherDatabase: WeatherDataBase,
-                         weatherLocationProvider: WeatherLocationProvider) =
-        WeatherRepository(weatherApi, weatherDatabase,weatherLocationProvider)
+    fun weatherRepository(
+        weatherApi: WeatherApi, weatherDatabase: WeatherDataBase,
+        weatherLocationProvider: WeatherLocationProvider
+    ): WeatherRepository =
+        WeatherRepositoryImpl(weatherApi, weatherDatabase, weatherLocationProvider)
 
+    @Provides
+    @Singleton
+    fun weatherAndForecastUseCaseProvider(weatherRepository: WeatherRepository) =
+        WeatherAndForecastUseCase(weatherRepository)
 
     @Provides
     @Singleton

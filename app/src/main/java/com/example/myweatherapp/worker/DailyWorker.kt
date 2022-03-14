@@ -6,7 +6,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.example.local.room.WeatherEntity
 import com.example.myweatherapp.R
-import com.example.myweatherapp.repository.WeatherRepository
+import com.example.myweatherapp.usecase.WeatherAndForecastUseCase
 import com.example.myweatherapp.worker.Constants.CHANNEL_ID
 import com.example.myweatherapp.worker.Constants.NOTIFICATION_ID
 import com.example.remote.util.Resource
@@ -23,11 +23,11 @@ import java.util.concurrent.TimeUnit
 class DailyWorker @AssistedInject constructor(
     @Assisted private val ctx: Context,
     @Assisted params: WorkerParameters,
-    private val _weatherRepository: WeatherRepository
+    private val _useCase: WeatherAndForecastUseCase
 ) : CoroutineWorker(ctx, params) {
-    private lateinit var response: Resource<WeatherEntity>
+    private lateinit var response: Resource<WeatherEntity?>
     override suspend fun doWork(): Result {
-        _weatherRepository.getWeatherAndForecastBasedOnLocation().collectLatest { response = it }
+        _useCase.getWeatherAndForecastBasedOnLocation().collectLatest { response = it }
         if (this::response.isInitialized) {
             when (response) {
                 is Resource.Success -> {

@@ -7,7 +7,7 @@ data class WeatherAndForecastResponseData(
     @SerializedName("current")
     val current: Current,
     @SerializedName("forecast")
-    val forecast: Forecast,
+    var forecast: Forecast,
     @SerializedName("location")
     val location: Location
 )

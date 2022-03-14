@@ -14,6 +14,12 @@ interface WeatherDAO {
         }
     }
 
+    @Transaction
+    suspend fun persistFetchedWeatherAndForecastData(weatherEntity: WeatherEntity) {
+        deleteAllPersistedWeatherData()
+        persistWeatherAndForecastData(weatherEntity)
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistWeatherAndForecastData(weatherEntity: WeatherEntity)
 

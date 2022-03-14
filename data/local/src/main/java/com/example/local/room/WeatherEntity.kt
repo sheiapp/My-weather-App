@@ -16,9 +16,9 @@ data class WeatherEntity(
     @ColumnInfo(name = "city_name")
     val cityName: String,
     @ColumnInfo(name = "condition_icon")
-    val conditionIcon: String,
+    val conditionIcon: String?,
     @ColumnInfo(name = "condition")
-    val conditionText: String,
+    val conditionText: String?,
     @ColumnInfo(name = "precipitation")
     val precipitation: String,
     @ColumnInfo(name = "wind_speed")
@@ -36,5 +36,5 @@ data class WeatherEntity(
     @ColumnInfo(name = "is_favorite_city")
     var isFavoriteCity: Boolean = false,
     @ColumnInfo(name = "is_temp_in_celsius")
-    val isTempInCelsius: Boolean = true
+    var isTempInCelsius: Boolean = true
 )

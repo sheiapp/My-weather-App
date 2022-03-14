@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
 import androidx.work.WorkManager
 import com.example.local.room.WeatherEntity
-import com.example.myweatherapp.repository.WeatherRepository
+import com.example.myweatherapp.usecase.WeatherAndForecastUseCase
 import com.example.myweatherapp.worker.DailyWorker.Companion.scheduleWorkForNotifyingUserWithCurrentWeather
 import com.example.remote.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,12 +25,12 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     _workManager: WorkManager,
     _workConstraints: Constraints,
-    private val _weatherRepository: WeatherRepository
+    private val _useCase: WeatherAndForecastUseCase
 ) : ViewModel() {
 
     private val _message = MutableSharedFlow<String>()
     val message = _message.asSharedFlow()
-    private val _weatherAndForecastDataSet = MutableStateFlow<Resource<WeatherEntity>?>(null)
+    private val _weatherAndForecastDataSet = MutableStateFlow<Resource<WeatherEntity?>?>(null)
     val weatherAndForecastDataSet = _weatherAndForecastDataSet.asStateFlow()
     private val _tempUnitState = MutableSharedFlow<Boolean?>()
     val tempUnitState = _tempUnitState.asSharedFlow()
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getWeatherAndForecastForCityName(cityName: String) = viewModelScope.launch(Dispatchers.IO) {
-        val response = _weatherRepository.getWeatherAndForecast(cityName, shouldFetch = true)
+        val response = _useCase.getWeatherAndForecast(cityName, shouldFetch = true)
         response.collect {
             _weatherAndForecastDataSet.value = it
         }
@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
 
     fun getWeatherAndForecastForLocation() = viewModelScope.launch(Dispatchers.IO) {
 
-        _weatherRepository.getWeatherAndForecastBasedOnLocation().collect {
+        _useCase.getWeatherAndForecastBasedOnLocation().collect {
             if (it is Resource.Loading)
                 _tempUnitState.emit(it.data?.isTempInCelsius)
             _weatherAndForecastDataSet.value = it
@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(
             _weatherAndForecastDataSet.value = Resource.Success(it)
         }
         _weatherAndForecastDataSet.value?.data?.let {
-            _weatherRepository.setTheCurrentSelectedCityAsFavorite(it.cityName)
+            _useCase.setTheCurrentSelectedCityAsFavorite(it.cityName)
         }
     }
 
@@ -70,6 +70,6 @@ class HomeViewModel @Inject constructor(
         _weatherAndForecastDataSet.value?.data?.copy(isTempInCelsius = isCelsius)?.let {
             _weatherAndForecastDataSet.value = Resource.Success(it)
         }
-        _weatherRepository.updateTempUnit(isCelsius)
+        _useCase.updateTempUnit(isCelsius)
     }
 }

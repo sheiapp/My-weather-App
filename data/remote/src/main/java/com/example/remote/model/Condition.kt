@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Condition(
     @SerializedName("code")
-    val code: Int,
+    var code: Int? = null,
     @SerializedName("icon")
-    val icon: String,
+    var icon: String? = null,
     @SerializedName("text")
-    val text: String
+    var text: String? = null
 )

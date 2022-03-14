@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class Forecastday(
     @SerializedName("astro")
-    val astro: Astro,
+    val astro: Astro? = null,
     @SerializedName("date")
-    val date: String,
+    val date: String? = null,
     @SerializedName("date_epoch")
-    val dateEpoch: Int,
+    val dateEpoch: Int? = null,
     @SerializedName("day")
-    val day: Day,
+    val day: Day? = null,
     @SerializedName("hour")
-    val hour: List<Hour>
+    val hour: List<Hour>? = null
 )

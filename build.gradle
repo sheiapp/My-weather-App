@@ -51,7 +51,7 @@ buildscript {
                 ]
                 ,
                 test           : [
-                        jUnit: "junit:junit:4.13.2${versions.jUnitVersion}"
+                        jUnit: "junit:junit:${versions.jUnitVersion}"
                 ],
                 androidTest    : [
                         androidxJunit: "androidx.test.ext:junit:${versions.junitExtVersion}",

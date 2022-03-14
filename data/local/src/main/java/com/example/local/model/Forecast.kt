@@ -7,9 +7,9 @@ import androidx.room.ColumnInfo
  */
 data class Forecast(
     @ColumnInfo(name = "condition_icon")
-    val conditionIcon: String,
+    val conditionIcon: String?,
     @ColumnInfo(name = "condition")
-    val conditionText: String,
+    val conditionText: String?,
     @ColumnInfo(name = "date")
-    val date: String,
+    val date: String?,
 )
